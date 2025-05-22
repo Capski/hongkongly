@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hongkongly | Contact Us</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Indie+Flower&family=Sue+Ellen+Francisco&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Caudex', serif;
+        }
+        
+        body {
+            background-color: #e4e1e1;
+            min-height: 100vh;
+            cursor: url('./cursor/1.svg'), auto;
+            overflow-x: hidden;
+        }
+        
+        .nav-link:hover, .contact-btn, .mobile-menu-toggle, button, input, textarea {
+            cursor: url('./cursor/2.svg'), pointer;
+        }
+        
+        p {
+            cursor: url('./cursor/3.svg'), text;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background-color: #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+        
+        .logo {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 80px;
+            margin: 0 20px;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5rem;
+            position: relative;
+            padding: 5px 0;
+            font-family: 'Indie Flower', cursive;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link.active {
+            font-weight: 500;
+            text-decoration: underline;
+        }
+
+        .nav-link:hover {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-btn {
+            background-color: #000;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-family: 'Indie Flower', cursive;
+            margin-left: auto;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s linear;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100vh;
+            background-color: #f8f8f8;
+            z-index: 9;
+            padding: 80px 40px 40px;
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-nav.open {
+            left: 0;
+        }
+        
+        .mobile-nav .nav-link {
+            margin: 10px 0;
+            font-size: 1.4rem;
+        }
+        
+        .mobile-nav .contact-btn {
+            margin: 20px 0 0;
+            text-align: center;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 8;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .hero {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 8rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+        
+        .hero p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 2rem;
+            color: #333;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background-color: rgba(240, 240, 240, 0.8);
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.1rem;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .form-buttons button {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.2rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-clear {
+            background-color: #333;
+            color: white;
+        }
+
+        .btn-submit {
+            background-color: #000;
+            color: white;
+        }
+
+        .btn-clear:hover,
+        .btn-submit:hover {
+            transform: translateY(-3px);
+        }
+        
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 60%, rgb(245, 235, 105), rgb(238, 238, 238) 40%);
+            z-index: -1;
+        }
+        
+        @media (max-width: 1024px) {
+            .contact-form {
+                max-width: 700px;
+                margin: 30px auto;
+                padding: 30px;
+            }
+            
+            .nav-links {
+                gap: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .contact-btn {
+                display: none;
+            }
+            
+            .hero {
+                padding: 30px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .hero p {
+                font-size: 1.5rem;
+            }
+            
+            .contact-form {
+                max-width: 90%;
+                margin: 20px auto;
+                padding: 25px;
+            }
+            
+            .form-group label {
+                font-size: 1.3rem;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                padding: 10px;
+                font-size: 1rem;
+            }
+            
+            .form-buttons button {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .contact-form {
+                padding: 20px;
+            }
+            
+            .form-group label {
+                font-size: 1.2rem;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .form-buttons button {
+                width: 100%;
+                font-size: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-link {
+                font-size: 1.1rem;
+            }
+            
+            .contact-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f8f8f8;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            border-radius: 10px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 0;
+            margin-top: 10px;
+        }
+
+        .dropdown-content a {
+            font-family: 'Indie Flower', cursive;
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+            
+        .dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #f8f8f8 transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav class="navbar">
+        <p class="logo">hongkong hubby</p>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">home</a>
+            <div class="dropdown">
+                <a href="essentials.html" class="nav-link">essentials</a>
+                <div class="dropdown-content">
+                    <a href="accommodation.html">accommodation</a>
+                    <a href="transportation.html">transportation</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="explore.html" class="nav-link">explore</a>
+                <div class="dropdown-content">
+                    <a href="attractions.html">attractions</a>
+                    <a href="shopping.html">shopping</a>
+                </div>
+            </div>
+            <a href="bites.html" class="nav-link">bites</a>
+        </div>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html" class="nav-link">home</a>
+        <a href="essentials.html" class="nav-link">essentials</a>
+        <a href="accommodation.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- accommodation</a>
+        <a href="transportation.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- transportation</a>
+        <a href="explore.html" class="nav-link">explore</a>
+        <a href="attractions.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- attractions</a>
+        <a href="shopping.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- shopping</a>
+        <a href="bites.html" class="nav-link">bites</a>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+    </div>
+    
+    <section class="hero">
+        <h1>reach out!</h1>
+        <p>Your ultimate guide to exploring the vibrant city of Hong Kong</p>
+    </section>
+    
+    <section class="contact-form">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message"></textarea>
+        </div>
+        <div class="form-buttons">
+            <button type="button" class="btn-clear" id="clearBtn">Clear</button>
+            <button type="submit" class="btn-submit" id="submitBtn">Submit</button>
+        </div>
+    </section>
+    
+    <script>
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        const overlay = document.getElementById('overlay');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileNav.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        const mobileNavLinks = mobileNav.querySelectorAll('.nav-link, .contact-btn');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        const clearBtn = document.getElementById('clearBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const messageInput = document.getElementById('message');
+        
+        clearBtn.addEventListener('click', () => {
+            nameInput.value = '';
+            emailInput.value = '';
+            phoneInput.value = '';
+            messageInput.value = '';
+        });
+        
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(validateForm()) {
+                alert('Thank you for your message! We will get back to you soon.');
+                clearBtn.click();
+            }
+        });
+        
+        function validateForm() {
+            let isValid = true;
+            
+            if(!nameInput.value.trim()) {
+                alert('Please enter your name');
+                isValid = false;
+            } else if(!emailInput.value.trim()) {
+                alert('Please enter your email');
+                isValid = false;
+            } else if(!validateEmail(emailInput.value)) {
+                alert('Please enter a valid email address');
+                isValid = false;
+            } else if(!messageInput.value.trim()) {
+                alert('Please enter a message');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+    </script>
+</body>
+</html> 

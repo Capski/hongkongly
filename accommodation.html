@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hongkongly | Accommodation in Hong Kong</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Indie+Flower&family=Sue+Ellen+Francisco&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Caudex', serif;
+        }
+        
+        body {
+            background-color: #e4e1e1;
+            min-height: 100vh;
+            cursor: url('./cursor/1.svg'), auto;
+            overflow-x: hidden;
+        }
+        
+        .nav-link:hover, .contact-btn, .mobile-menu-toggle {
+            cursor: url('./cursor/2.svg'), pointer;
+        }
+        
+        p {
+            cursor: url('./cursor/3.svg'), text;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background-color: #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+        
+        .logo {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 80px;
+            margin: 0 20px;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5rem;
+            position: relative;
+            padding: 5px 0;
+            font-family: 'Indie Flower', cursive;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link.active {
+            font-weight: 500;
+            text-decoration: underline;
+        }
+
+        .nav-link:hover {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-btn {
+            background-color: #000;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-family: 'Indie Flower', cursive;
+            margin-left: auto;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s linear;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100vh;
+            background-color: #f8f8f8;
+            z-index: 9;
+            padding: 80px 40px 40px;
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-nav.open {
+            left: 0;
+        }
+        
+        .mobile-nav .nav-link {
+            margin: 10px 0;
+            font-size: 1.4rem;
+        }
+        
+        .mobile-nav .contact-btn {
+            margin: 20px 0 0;
+            text-align: center;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 8;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .hero {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 8rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+        
+        .hero p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 2rem;
+            color: #333;
+            margin: 0 auto;
+        }
+
+        .accommodation-section {
+            padding: 40px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .accommodation-category {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .accommodation-category h2 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .accommodation-item {
+            display: flex;
+            margin-bottom: 40px;
+            background-color: rgba(240, 240, 240, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .accommodation-image {
+            flex: 0 0 40%;
+            background-color: #aaa;
+        }
+
+        .accommodation-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .accommodation-content {
+            flex: 1;
+            padding: 25px;
+            text-align: left;
+        }
+
+        .accommodation-content h3 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .accommodation-content p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 60%, rgb(245, 235, 105), rgb(238, 238, 238) 40%);
+            z-index: -1;
+        }
+        
+        @media (max-width: 1024px) {
+            .accommodation-section {
+                padding: 30px;
+            }
+            
+            .accommodation-category h2 {
+                font-size: 3.5rem;
+            }
+            
+            .nav-links {
+                gap: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .contact-btn {
+                display: none;
+            }
+            
+            .hero {
+                padding: 30px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .hero p {
+                font-size: 1.5rem;
+            }
+            
+            .accommodation-section {
+                padding: 20px;
+            }
+            
+            .accommodation-category h2 {
+                font-size: 3rem;
+            }
+            
+            .accommodation-item {
+                flex-direction: column;
+            }
+            
+            .accommodation-image {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .accommodation-content {
+                padding: 20px;
+            }
+            
+            .accommodation-content h3 {
+                font-size: 1.8rem;
+            }
+            
+            .accommodation-content p {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .accommodation-category h2 {
+                font-size: 2.5rem;
+            }
+            
+            .accommodation-content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .accommodation-content p {
+                font-size: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-link {
+                font-size: 1.1rem;
+            }
+            
+            .contact-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f8f8f8;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            border-radius: 10px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 0;
+            margin-top: 10px;
+        }
+
+        .dropdown-content a {
+            font-family: 'Indie Flower', cursive;
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+            
+        .dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #f8f8f8 transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav class="navbar">
+        <p class="logo">hongkong hubby</p>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">home</a>
+            <div class="dropdown">
+                <a href="essentials.html" class="nav-link">essentials</a>
+                <div class="dropdown-content">
+                    <a href="accommodation.html" class="active">accommodation</a>
+                    <a href="transportation.html">transportation</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="explore.html" class="nav-link">explore</a>
+                <div class="dropdown-content">
+                    <a href="attractions.html">attractions</a>
+                    <a href="shopping.html">shopping</a>
+                </div>
+            </div>
+            <a href="bites.html" class="nav-link">bites</a>
+        </div>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html" class="nav-link">home</a>
+        <a href="essentials.html" class="nav-link">essentials</a>
+        <a href="accommodation.html" class="nav-link active" style="padding-left: 20px; font-size: 1.2rem;">- accommodation</a>
+        <a href="transportation.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- transportation</a>
+        <a href="explore.html" class="nav-link">explore</a>
+        <a href="attractions.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- attractions</a>
+        <a href="shopping.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- shopping</a>
+        <a href="bites.html" class="nav-link">bites</a>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+    </div>
+    
+    <section class="hero">
+        <h1>accomodation</h1>
+        <p>Your ultimate guide to exploring the vibrant city of Hong Kong</p>
+    </section>
+    
+    <section class="accommodation-section">
+        <div class="accommodation-category">
+            <h2>hotels</h2>
+            <div class="accommodation-item">
+                <div class="accommodation-image"><img src="./images/accomodation/rosedale.jpg" alt=""></div>
+                <div class="accommodation-content">
+                    <h3>Rosedale Hotel Hong Kong</h3>
+                    <p>Rosedale Hotel Hong Kong rises 31 floors above Causeway Bay's electric streetscape, occupying a sleek glass tower just minutes from Victoria Park and major shopping districts. The 299-room property balances contemporary Chinese design elements with functional amenities including a Sky Club lounge offering panoramic harbor views from its 30th-floor perch. Opened in 1990 and renovated in 2015, this four-star establishment serves primarily business travelers with meeting facilities, a 24-hour fitness center, and the Sonata Western Restaurant specializing in continental cuisine. Its central location provides easy access to Causeway Bay MTR station, Hong Kong Convention Centre, and the historic Noonday Gun, making it a practical base for exploring the city's eastern commercial district.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="accommodation-item">
+                <div class="accommodation-image"><img src="./images/accomodation/Hyatt Regency Hong Kong.jpg" alt=""></div>
+                <div class="accommodation-content">
+                    <h3>Hyatt Regency Hong Kong</h3>
+                    <p>Hyatt Regency Hong Kong anchors the vibrant Tsim Sha Tsui district with its distinctive presence in the K11 Art Mall complex on Hanoi Road. This 381-room urban sanctuary rises 24 floors above Kowloon's bustling streets, offering harbor-view accommodations decorated in warm woods and natural tones. The property's culinary highlights include the Hugo's restaurant, serving classic European cuisine since 1969, and the Chin Chin Bar where live jazz performances complement creative cocktails. Extensively renovated in 2009 after relocating from its original Nathan Road site, the hotel maintains signature Hyatt touches like a temperature-controlled outdoor pool and Club Lounge while providing direct MTR access through the basement level, positioning guests at the nexus of Hong Kong's cultural and commercial pulse.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accommodation-item">
+                <div class="accommodation-image"><img src="./images/accomodation/Harbour Grand Hong Kong.jpg" alt=""></div>
+                <div class="accommodation-content">
+                    <h3>Harbour Grand Hong Kong</h3>
+                    <p>Harbour Grand Hong Kong commands the North Point waterfront with its curved glass façade capturing uninterrupted views across Victoria Harbour. This five-star property houses 828 rooms and suites featuring floor-to-ceiling windows that frame the bustling shipping lanes and Hong Kong Island's dramatic skyline. Since opening in 2009, the hotel has distinguished itself with luxurious offerings including a stunning rooftop outdoor pool with infinity edges that appear to merge with the harbor below. Five distinct restaurants provide diverse dining options, while the award-winning Le Spa offers treatments incorporating traditional Chinese healing techniques. Connected to MTR stations via complimentary shuttle buses, the property stands slightly removed from downtown's intensity while maintaining accessibility to central business and shopping districts.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accommodation-item">
+                <div class="accommodation-image"><img src="./images/accomodation/Atlas Guest House & Backpackers.jpg" alt=""></div>
+                <div class="accommodation-content">
+                    <h3>Atlas Guest House & Backpackers</h3>
+                    <p>Atlas Guest House & Backpackers occupies a converted residential building in the heart of Tsim Sha Tsui's Chungking Mansions, offering no-frills accommodation for budget travelers since 2005. This compact hostel squeezes sixteen rooms across two floors of the infamous 17-story complex, where tight quarters are compensated by some of Hong Kong's lowest nightly rates and an unbeatable location just steps from Kowloon's waterfront promenade. Common areas include a small pantry with microwave and water dispenser, while rooms feature basic amenities like air conditioning, free Wi-Fi, and shared or private bathrooms depending on room category. The property's international staff reflects the building's multicultural character, providing insider tips on exploring Hong Kong while navigating guests through the labyrinthine complex that houses scores of similar budget accommodations alongside currency exchanges, ethnic restaurants, and electronics shops.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accommodation-item">
+                <div class="accommodation-image"><img src="./images/accomodation/Yesinn Hotel & Youth Hostel.jpg" alt=""></div>
+                <div class="accommodation-content">
+                    <h3>Yesinn Hotel & Youth Hostel</h3>
+                    <p>Yesinn Hotel & Youth Hostel brings backpacker-friendly accommodation to Causeway Bay's retail heart, occupying upper floors of a commercial building on busy Percival Street. This locally owned establishment offers both dormitory and private rooms featuring simple furnishings, locker storage, and shared bathrooms with reliable hot water – luxuries not always guaranteed at this price point in space-constrained Hong Kong. The property's communal kitchen and lounge area foster connections among international travelers, while free walking tours led by staff highlight hidden aspects of Hong Kong life beyond typical tourist routes. Operating since 2008, the hostel maintains its popularity through central location, competitive pricing, and thoughtful touches like free tea and instant noodles available around the clock, providing budget travelers authentic immersion in Hong Kong's fast-paced urban lifestyle.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accommodation-item">
+                <div class="accommodation-image"><img src="./images/accomodation/The Upper House.jpg" alt=""></div>
+                <div class="accommodation-content">
+                    <h3>The Upper House</h3>
+                    <p>The Upper House redefines luxury hospitality from its perch atop Pacific Place, occupying floors 38-49 of a sleek tower designed by renowned architect André Fu. This intimate 117-room property opened in 2009 as the flagship of Swire Hotels' "House" collection, featuring residential-style accommodations starting at 68 square meters – among the largest standard rooms in Hong Kong. Interiors follow Asian-influenced minimalist aesthetics with limestone bathrooms, walk-in rain showers, and freestanding bathtubs positioned to maximize panoramic harbor or mountain views. The property's signature restaurants include the acclaimed Café Gray Deluxe on the 49th floor, where Chef Gray Kunz's modern European cuisine complements spectacular views through floor-to-ceiling windows. With no traditional lobby or check-in counters, guests experience arrival via a dramatic limestone-clad escalator journey before being escorted directly to their rooms for personalized registration services.
+                    </p>
+                </div>
+            </div>
+
+            <div class="accommodation-item">
+                <div class="accommodation-image"><img src="./images/accomodation/The Fleming.jpg" alt=""></div>
+                <div class="accommodation-content">
+                    <h3>The Fleming</h3>
+                    <p>The Fleming stands as a boutique tribute to Hong Kong's maritime heritage, occupying a renovated 1970s building in Wan Chai's increasingly trendy restaurant district. This independent hotel reopened in 2017 following extensive redesign inspired by the iconic Star Ferry, with 66 rooms featuring custom-designed furnishings that reference Hong Kong's nautical history through brass fixtures, navy blue walls, and porthole-inspired mirrors. The ground floor houses the acclaimed Italian restaurant Osteria Marzia, whose Mediterranean seafood specialties and coastal Italian wines have established it as a dining destination independent of the hotel. Guest rooms, though compact by international standards, maximize space through clever design touches including sliding bathroom doors, built-in cabinetry, and raised platform beds with storage underneath. Located just steps from the Wan Chai MTR station and the Convention Centre, The Fleming delivers distinctive character in an area traditionally dominated by larger corporate properties.RetryClaude can make mistakes. Please double-check responses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        const overlay = document.getElementById('overlay');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileNav.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        const mobileNavLinks = mobileNav.querySelectorAll('.nav-link, .contact-btn');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+</body>
+</html> 

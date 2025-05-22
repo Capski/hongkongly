@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hongkongly | Attractions in Hong Kong</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Indie+Flower&family=Sue+Ellen+Francisco&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Caudex', serif;
+        }
+        
+        body {
+            background-color: #e4e1e1;
+            min-height: 100vh;
+            cursor: url('./cursor/1.svg'), auto;
+            overflow-x: hidden;
+        }
+        
+        .nav-link:hover, .contact-btn, .mobile-menu-toggle {
+            cursor: url('./cursor/2.svg'), pointer;
+        }
+        
+        p {
+            cursor: url('./cursor/3.svg'), text;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background-color: #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+        
+        .logo {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 80px;
+            margin: 0 20px;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5rem;
+            position: relative;
+            padding: 5px 0;
+            font-family: 'Indie Flower', cursive;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link.active {
+            font-weight: 500;
+            text-decoration: underline;
+        }
+
+        .nav-link:hover {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-btn {
+            background-color: #000;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-family: 'Indie Flower', cursive;
+            margin-left: auto;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s linear;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100vh;
+            background-color: #f8f8f8;
+            z-index: 9;
+            padding: 80px 40px 40px;
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-nav.open {
+            left: 0;
+        }
+        
+        .mobile-nav .nav-link {
+            margin: 10px 0;
+            font-size: 1.4rem;
+        }
+        
+        .mobile-nav .contact-btn {
+            margin: 20px 0 0;
+            text-align: center;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 8;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .hero {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 8rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+        
+        .hero p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 2rem;
+            color: #333;
+            margin: 0 auto;
+        }
+
+        .attractions-section {
+            padding: 40px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .attractions-category {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .attractions-category h2 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .attractions-item {
+            display: flex;
+            margin-bottom: 40px;
+            background-color: rgba(240, 240, 240, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .attractions-image {
+            flex: 0 0 40%;
+            background-color: #aaa;
+        }
+
+        .attractions-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .attractions-content {
+            flex: 1;
+            padding: 25px;
+            text-align: left;
+        }
+
+        .attractions-content h3 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .attractions-content p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 60%, rgb(245, 235, 105), rgb(238, 238, 238) 40%);
+            z-index: -1;
+        }
+        
+        @media (max-width: 1024px) {
+            .attractions-section {
+                padding: 30px;
+            }
+            
+            .attractions-category h2 {
+                font-size: 3.5rem;
+            }
+            
+            .nav-links {
+                gap: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .contact-btn {
+                display: none;
+            }
+            
+            .hero {
+                padding: 30px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .hero p {
+                font-size: 1.5rem;
+            }
+            
+            .attractions-section {
+                padding: 20px;
+            }
+            
+            .attractions-category h2 {
+                font-size: 3rem;
+            }
+            
+            .attractions-item {
+                flex-direction: column;
+            }
+            
+            .attractions-image {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .attractions-content {
+                padding: 20px;
+            }
+            
+            .attractions-content h3 {
+                font-size: 1.8rem;
+            }
+            
+            .attractions-content p {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .attractions-category h2 {
+                font-size: 2.5rem;
+            }
+            
+            .attractions-content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .attractions-content p {
+                font-size: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-link {
+                font-size: 1.1rem;
+            }
+            
+            .contact-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f8f8f8;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            border-radius: 10px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 0;
+            margin-top: 10px;
+        }
+
+        .dropdown-content a {
+            font-family: 'Indie Flower', cursive;
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #f8f8f8 transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav class="navbar">
+        <p class="logo">hongkong hubby</p>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">home</a>
+            <div class="dropdown">
+                <a href="essentials.html" class="nav-link">essentials</a>
+                <div class="dropdown-content">
+                    <a href="accommodation.html">accommodation</a>
+                    <a href="transportation.html">transportation</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="explore.html" class="nav-link">explore</a>
+                <div class="dropdown-content">
+                    <a href="attractions.html" class="active">attractions</a>
+                    <a href="shopping.html">shopping</a>
+                </div>
+            </div>
+            <a href="bites.html" class="nav-link">bites</a>
+        </div>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html" class="nav-link">home</a>
+        <a href="essentials.html" class="nav-link">essentials</a>
+        <a href="accommodation.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- accommodation</a>
+        <a href="transportation.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- transportation</a>
+        <a href="explore.html" class="nav-link">explore</a>
+        <a href="attractions.html" class="nav-link active" style="padding-left: 20px; font-size: 1.2rem;">- attractions</a>
+        <a href="shopping.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- shopping</a>
+        <a href="bites.html" class="nav-link">bites</a>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+    </div>
+    
+    <section class="hero">
+        <h1>attractions</h1>
+        <p>Discover the best of Hong Kong, from stunning views to vibrant street life</p>
+    </section>
+    
+    <section class="attractions-section">
+        <div class="attractions-category">
+            <h2>Landmarks</h2>
+            <div class="attractions-item">
+                <div class="attractions-image"><img src="./images/attractions/victoria peak & peak tram.jpg" alt=""></div>
+                <div class="attractions-content">
+                    <h3>Victoria Peak & Peak Tram</h3>
+                    <p>Victoria Peak rises majestically to 552 meters above Hong Kong Island, offering the city's most iconic panorama across its glittering skyline and harbor waters. The historic Peak Tram, running since 1888, climbs at nerve-tingling gradients up to 27 degrees along its 1.4-kilometer route, transforming from a colonial-era coal-powered system to today's microprocessor-controlled funicular. As you ascend through dense subtropical forest, the city's architectural marvels gradually reveal themselves beneath you, culminating at the Peak Tower's wok-shaped structure where visitors can experience a truly breathtaking 360-degree vista that transitions from daytime grandeur to an evening symphony of lights.</p>
+                </div>
+            </div>
+            <div class="attractions-item">
+                <div class="attractions-image"><img src="./images/attractions/star ferry ride.jpg" alt=""></div>
+                <div class="attractions-content">
+                    <h3>Star Ferry Ride</h3>
+                    <p>The emerald-green Star Ferry vessels have been carving their path across Victoria Harbour since 1888, providing an essential maritime connection between Hong Kong Island and Kowloon. These distinctive double-ended ferries, with their wooden benches and open-air upper decks, offer an unparalleled 10-minute journey through one of the world's busiest harbors for just a few Hong Kong dollars. As engines thrum beneath you, the crossing delivers spectacular views of Hong Kong's dramatic skyline, from colonial-era clock towers to ultramodern skyscrapers that seem to defy gravity, all while cargo ships, traditional junks, and luxury yachts navigate the busy shipping lanes around you – creating an authentic Hong Kong experience that has remained essentially unchanged for generations.
+                    </p>
+                </div>
+            </div>
+            <div class="attractions-item">
+                <div class="attractions-image"><img src="./images/attractions/tsim sha tsui promenade & avenue of stars.jpg" alt=""></div>
+                <div class="attractions-content">
+                    <h3>Tsim Sha Tsui Promenade & Avenue of Stars</h3>
+                    <p>Stretching along Kowloon's southern edge, the Tsim Sha Tsui Promenade curves around Victoria Harbour offering uninterrupted views of Hong Kong Island's famous skyline. This waterfront pathway leads to the recently renovated Avenue of Stars, Hong Kong's tribute to its storied film industry and answer to Hollywood's Walk of Fame. Bronze handprints of cinema legends like Jackie Chan and Bruce Lee (whose life-sized statue stands in his famous fighting pose) line the promenade alongside QR codes linking to multimedia exhibits. The location provides the perfect vantage point for the Symphony of Lights show, when dozens of buildings across the harbor coordinate their illuminations to music each evening at 8 PM, creating a dazzling spectacle that transforms the cityscape into a canvas of synchronized light and color.
+                    </p>
+                </div>
+            </div>
+            <div class="attractions-item">
+                <div class="attractions-image"><img src="./images/attractions/ngong ping 360 & tian tan buddha.jpg" alt=""></div>
+                <div class="attractions-content">
+                    <h3>Ngong Ping 360 & Tian Tan Buddha</h3>
+                    <p>The Ngong Ping 360 cable car system delivers visitors on a breathtaking 5.7-kilometer aerial journey across Lantau Island's mountainous terrain, soaring above dense forest canopies and Tung Chung Bay's azure waters. Crystal cabins with glass floors heighten the dramatic 25-minute experience as the gondolas climb toward the cultural center of Ngong Ping Village. Dominating the landscape is the magnificent Tian Tan Buddha, a 34-meter-tall bronze statue completed in 1993 that sits atop 268 steps, representing man's journey toward enlightenment. The Buddha's right hand is raised in a gesture of blessing, while its serene face gazes north toward mainland China, surrounded by six smaller bronze deities offering flowers, incense, and other symbolic gifts to the enlightened one in a spiritual setting enhanced by mountain mists that often shroud the complex.
+                    </p>
+                </div>
+            </div>
+            <div class="attractions-item">
+                <div class="attractions-image"><img src="./images/attractions/street markets in mong kok.jpg" alt=""></div>
+                <div class="attractions-content">
+                    <h3>Street Markets in Mong Kok</h3>
+                    <p>Mong Kok's labyrinthine street markets transform the world's most densely populated district into a sensory explosion of commerce and culture, where neon signs cast multicolored glows across densely packed stalls. The Ladies' Market stretches over a kilometer along Tung Choi Street, offering everything from counterfeit designer goods to electronics alongside traditional silk garments. Nearby, Sneaker Street (Fa Yuen Street) displays thousands of athletic shoes in specialized boutiques where sneaker culture thrives amidst passionate collectors. As evening falls, Mong Kok transforms further at Temple Street Night Market, where fortune tellers set up alongside food stalls serving sizzling Cantonese delicacies like curry fish balls and stinky tofu, creating a perfect microcosm of Hong Kong's unique urban energy where ancient traditions and modern commerce converge in a captivating retail symphony.
+                    </p>
+                </div>
+            </div>
+            <div class="attractions-item">
+                <div class="attractions-image"><img src="./images/attractions/central to mid-levels escalator.jpg" alt=""></div>
+                <div class="attractions-content">
+                    <h3>Central to Mid-Levels Escalator</h3>
+                    <p>The Central-Mid-Levels Escalator system stands as an engineering marvel, stretching 800 meters through Hong Kong Island's steep urban landscape and rising 135 meters from Queen's Road Central to Conduit Road. Completed in 1993 at a cost of HK$240 million, this network of 20 escalators and three moving walkways forms the world's longest outdoor covered escalator system, transporting over 85,000 people daily. The system operates downhill from 6 AM to 10 AM to serve commuters heading to work, then reverses direction for the remainder of the day. As it traverses diverse neighborhoods, the escalator passes trendy bars in Soho, traditional medicine shops in residential areas, and colonial-era architecture, creating a fascinating vertical journey through Hong Kong's social strata and transforming what was once an arduous uphill climb into a convenient urban transport solution that has revitalized entire districts along its route.2 / 2RetryClaude can make mistakes. Please double-check responses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        const overlay = document.getElementById('overlay');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileNav.classList.toggle('open');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+        });
+        
+        overlay.addEventListener('click', () => {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        const mobileNavLinks = mobileNav.querySelectorAll('.nav-link, .contact-btn');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
+</body>
+</html> 

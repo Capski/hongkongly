@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hongkongly | Hong Kong Bites</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caudex:ital,wght@0,400;0,700;1,400;1,700&family=Indie+Flower&family=Sue+Ellen+Francisco&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Caudex', serif;
+        }
+        
+        body {
+            background-color: #e4e1e1;
+            min-height: 100vh;
+            cursor: url('./cursor/1.svg'), auto;
+            overflow-x: hidden;
+        }
+        
+        .nav-link:hover, .contact-btn, .mobile-menu-toggle {
+            cursor: url('./cursor/2.svg'), pointer;
+        }
+        
+        p {
+            cursor: url('./cursor/3.svg'), text;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background-color: #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+        
+        .logo {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 80px;
+            margin: 0 20px;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5rem;
+            position: relative;
+            padding: 5px 0;
+            font-family: 'Indie Flower', cursive;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link.active {
+            font-weight: 500;
+            text-decoration: underline;
+        }
+
+        .nav-link:hover {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-btn {
+            background-color: #000;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-family: 'Indie Flower', cursive;
+            margin-left: auto;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+        
+        .mobile-menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s linear;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100vh;
+            background-color: #f8f8f8;
+            z-index: 9;
+            padding: 80px 40px 40px;
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-nav.open {
+            left: 0;
+        }
+        
+        .mobile-nav .nav-link {
+            margin: 10px 0;
+            font-size: 1.4rem;
+        }
+        
+        .mobile-nav .contact-btn {
+            margin: 20px 0 0;
+            text-align: center;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 8;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+        
+        .hero {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 8rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+        
+        .hero p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 2rem;
+            color: #333;
+            margin: 0 auto;
+        }
+
+        .food-section {
+            padding: 40px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .food-category {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .food-category h2 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .food-item {
+            display: flex;
+            margin-bottom: 40px;
+            background-color: rgba(240, 240, 240, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .food-image {
+            flex: 0 0 40%;
+            background-color: #aaa;
+        }
+
+        .food-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .food-content {
+            flex: 1;
+            padding: 25px;
+            text-align: left;
+        }
+
+        .food-content h3 {
+            font-family: 'Sue Ellen Francisco', cursive;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .food-content p {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.3rem;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .food-item li {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.3rem;
+            line-height: 1.5;
+        }
+        
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 60%, rgb(245, 235, 105), rgb(238, 238, 238) 40%);
+            z-index: -1;
+        }
+        
+        @media (max-width: 1024px) {
+            .food-section {
+                padding: 30px;
+            }
+            
+            .food-category h2 {
+                font-size: 3.5rem;
+            }
+            
+            .nav-links {
+                gap: 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .contact-btn {
+                display: none;
+            }
+            
+            .hero {
+                padding: 30px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .hero p {
+                font-size: 1.5rem;
+            }
+            
+            .food-section {
+                padding: 20px;
+            }
+            
+            .food-category h2 {
+                font-size: 3rem;
+            }
+            
+            .food-item {
+                flex-direction: column;
+            }
+            
+            .food-image {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .food-content {
+                padding: 20px;
+            }
+            
+            .food-content h3 {
+                font-size: 1.8rem;
+            }
+            
+            .food-content p {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .food-category h2 {
+                font-size: 2.5rem;
+            }
+            
+            .food-content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .food-content p {
+                font-size: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-link {
+                font-size: 1.1rem;
+            }
+            
+            .contact-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f8f8f8;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            border-radius: 10px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 0;
+            margin-top: 10px;
+        }
+
+        .dropdown-content a {
+            font-family: 'Indie Flower', cursive;
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-content::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #f8f8f8 transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    <div class="overlay" id="overlay"></div>
+    
+    <nav class="navbar">
+        <p class="logo">hongkong hubby</p>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">home</a>
+            <div class="dropdown">
+                <a href="essentials.html" class="nav-link">essentials</a>
+                <div class="dropdown-content">
+                    <a href="accommodation.html">accommodation</a>
+                    <a href="transportation.html">transportation</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="explore.html" class="nav-link">explore</a>
+                <div class="dropdown-content">
+                    <a href="attractions.html">attractions</a>
+                    <a href="shopping.html">shopping</a>
+                </div>
+            </div>
+            <a href="bites.html" class="nav-link active">bites</a>
+        </div>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html" class="nav-link">home</a>
+        <a href="essentials.html" class="nav-link">essentials</a>
+        <a href="accommodation.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- accommodation</a>
+        <a href="transportation.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- transportation</a>
+        <a href="explore.html" class="nav-link">explore</a>
+        <a href="attractions.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- attractions</a>
+        <a href="shopping.html" class="nav-link" style="padding-left: 20px; font-size: 1.2rem;">- shopping</a>
+        <a href="bites.html" class="nav-link active">bites</a>
+        <a href="contact.html" class="contact-btn">Contact Us</a>
+    </div>
+    
+    <section class="hero">
+        <h1>bites</h1>
+        <p>Your ultimate guide to exploring the vibrant city of Hong Kong</p>
+    </section>
+    
+    <section class="food-section">
+
+        <div class="food-category">
+            <h2>Cafe</h2>
+            <!-- Kam Wah Cafe & Cake Shop -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/Kam Wah Cafe & Cake Shop.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>Kam Wah Cafe & Cake Shop</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Famous for pineapple buns with crispy tops and rich butter filling</li>
+                        <li>Authentic Hong Kong cafe atmosphere</li>
+                        <li>Inconsistent food quality (egg tarts receive mixed reviews)</li>
+                    </ul>
+                    <p>A quintessential cha chaan teng in Mong Kok, Kam Wah Cafe is famous for its pineapple buns and milk tea. It's a great spot for experiencing authentic Hong Kong-style breakfast and casual local fare, making it a must-visit for those seeking classic comfort food in a lively, no-frills setting.</p>
+                </div>
+            </div>
+            <!-- Waso Cafe Tsim Sha Tsui -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/Waso Cafe Tsim Sha Tsui.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>Waso Cafe Tsim Sha Tsui</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Traditional dishes such as Polo Buns, noodle soups</li>
+                        <li>Lively, vibrant local vibe</li>
+                        <li>Cleanliness concerns (sticky flooring)</li>
+                    </ul>
+                    <p>A popular cha chaan teng in Tsim Sha Tsui, Waso Cafe offers a wide range of Hong Kong-style comfort foods and beverages. It's a trendy, accessible choice for breakfast, lunch, or dinner, especially for those wanting a casual but authentic local cafe experience.</p>
+                </div>
+            </div>
+            <!-- Mon Kee Cafe -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/Mon Kee Cafe.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>Mon Kee Cafe</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Japanese-style scrambled eggs and BBQ pork rice</li>
+                        <li>Unique twist on classic dishes</li>
+                        <li>Menu is relatively small</li>
+                    </ul>
+                    <p>Mon Kee Cafe in Quarry Bay is a beloved cha chaan teng offering a broad menu of Hong Kong-style comfort foods. Its family-friendly vibe and consistent quality make it a solid pick for casual meals and local favorites.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Street Food Category -->
+        <div class="food-category">
+            <h2>Street Food</h2>
+            <!-- Pei Ho Street Cooked Food Centre -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/Pei Ho Street Cooked Food Centre.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>Pei Ho Street Cooked Food Centre</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Wide range of cuisines (Chinese, Indian, Thai, Vietnamese, Western)</li>
+                        <li>Affordable prices</li>
+                        <li>Basic and rough environment</li>
+                    </ul>
+                    <p>For a taste of Hong Kong's vibrant street food culture, Pei Ho Street Cooked Food Centre in Sham Shui Po is a bustling spot with various stalls serving affordable and authentic local dishes. It's perfect for foodies eager to sample a variety of street eats in a lively atmosphere.</p>
+                </div>
+            </div>
+            <!-- Woosung Street Temporary Cooked Food Hawker Bazaar -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/Woosung Street Temporary Cooked Food Hawker Bazaar.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>Woosung Street Temporary Cooked Food Hawker Bazaar</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Lively, authentic street food environment</li>
+                        <li>Wide range of Hong Kong-style dishes</li>
+                        <li>Temporary status (subject to closures/renovations)</li>
+                    </ul>
+                    <p>This hawker bazaar in Yau Ma Tei is a classic destination for sampling a wide range of local street foods in a communal setting. It's ideal for those who want to experience the authentic, bustling side of Hong Kong's food scene.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fine Dining Category -->
+        <div class="food-category">
+            <h2>Fine Dining</h2>
+            <!-- Lung King Heen -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/Lung King Heen.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>Lung King Heen</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>High quality and exquisite presentation of dim sum and seafood</li>
+                        <li>Elegant environment with scenic views</li>
+                        <li>Inconsistent food quality (some dishes greasy or salty)</li>
+                    </ul>
+                    <p>Located in the Four Seasons Hotel, Lung King Heen is renowned for its refined Cantonese cuisine and dim sum, with stunning harbour views. This Michelin-starred restaurant is perfect for those seeking an upscale dining experience with traditional flavors elevated to fine dining standards.</p>
+                </div>
+            </div>
+            <!-- T'ang Court -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/T'ang Court.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>T'ang Court</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Fresh, well-balanced, and flavorful Cantonese dishes</li>
+                        <li>Attentive, knowledgeable staff</li>
+                        <li>Inconsistent service (lapses in attentiveness, slow pacing)</li>
+                    </ul>
+                    <p>Housed in The Langham, T'ang Court is celebrated for its exquisite Cantonese dishes, including Peking duck and seafood specialties. It offers a luxurious setting and is ideal for special occasions or those wanting to taste the pinnacle of Hong Kong's Cantonese gastronomy.</p>
+                </div>
+            </div>
+            <!-- VEA Restaurant -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/VEA Restaurant.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>VEA Restaurant</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Creative Chinese-French fusion tasting menus</li>
+                        <li>Consistent quality and excellent service</li>
+                        <li>Pricey experience</li>
+                    </ul>
+                    <p>VEA stands out for its creative Chinese-French fusion tasting menus, blending local ingredients with modern techniques. This trendy, upscale spot is perfect for adventurous diners looking to experience Hong Kong's innovative culinary scene.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Local Comfort Category -->
+        <div class="food-category">
+            <h2>Local Comfort</h2>
+            <!-- Yat Tung Heen - Eaton HK -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/Yat Tung Heen - Eaton HK.jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>Yat Tung Heen - Eaton HK</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Consistent quality in food and service</li>
+                        <li>Modern, spacious, and cozy interior</li>
+                        <li>Some dishes may be oversalted</li>
+                    </ul>
+                    <p>This upscale Cantonese restaurant at Eaton HK is known for its refined traditional dishes and premium teas. Yat Tung Heen is a great choice for those seeking a blend of classic flavors and a contemporary, stylish dining environment.</p>
+                </div>
+            </div>
+            <!-- MY KITCHEN (Tibetan Halal Homemade Food Restaurant) -->
+            <div class="food-item">
+                <div class="food-image"><img src="images/bites/MY KITCHEN (Tibetan Halal Homemade Food Restaurant).jpg" alt=""></div>
+                <div class="food-content">
+                    <h3>MY KITCHEN (Tibetan Halal Homemade Food Restaurant)</h3>
+                    <ul style="font-family:'Indie Flower',cursive; font-size:1.1rem; margin-bottom:8px;">
+                        <li>Flavorful, well-seasoned Tibetan dishes (momos, Sha Khodhak, soups)</li>
+                        <li>Cozy, welcoming environment</li>
+                        <li>Some dishes may be bland or not authentic</li>
+                    </ul>
+                    <p>Offering a unique twist in Hong Kong's culinary landscape, MY KITCHEN specializes in Tibetan halal homemade food. With a strong reputation for both food and service, it's a standout for those seeking something different or with halal dietary needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html> 
